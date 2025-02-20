@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "proto-quests",
+	"version": "${version}",
+	"name": "ProtoQuests",
+	"description": "New questing mod with RPG (story) like style. A Fabric version for questing plugins.",
+	"authors": [
+		"WooksCode"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "GPL-3.0",
+	"icon": "assets/protoquests/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+          "net.wookscode.protoquests.ProtoQuests"
+		],
+		"client": [
+			"net.wookscode.protoquests.ProtoQuestsClient"
+		],
+		"fabric-datagen": [
+			"net.wookscode.protoquests.ProtoQuestsDataGenerator"
+		]
+	},
+	"mixins": [
+		"proto-quests.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.10",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	}
+}

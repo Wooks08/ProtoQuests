@@ -20,9 +20,9 @@ public class CreateNewQuest {
                            CommandRegistryAccess commandRegistryAccess,
                            CommandManager.RegistrationEnvironment registrationEnvironment){
 
-        dispatcher.register(CommandManager.literal("pq").then(CommandManager.literal("create")
+        dispatcher.register(CommandManager.literal("pq").then(CommandManager.literal("quest").then(CommandManager.literal("create")
                 .then(CommandManager.argument("name", StringArgumentType.string())
-                        .executes(CreateNewQuest::run))));
+                        .executes(CreateNewQuest::run)))));
     }
 
     private static int run(CommandContext<ServerCommandSource> context) {

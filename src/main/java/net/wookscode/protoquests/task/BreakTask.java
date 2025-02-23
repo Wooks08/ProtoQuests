@@ -13,23 +13,37 @@ public class BreakTask extends Task{
     private Block block;
     private int number;
     private Vec3d position;
-    private String type;
 
     public BreakTask(String name, Block block, int number, Vec3d position){
-        super(name);
+        super(name, "break");
         this.block = block;
         this.number = number;
         this.position = position;
-        this.type = "break";
     }
 
     public String getName(){
         return super.getName();
     }
 
+    public Block getBlock() {
+        return block;
+    }
+
     @Override
     public String toString(){
         return super.getName();
+    }
+
+    @Override
+    public HashMap<String, String> getProps(){
+        HashMap<String, String> return_hashmap = super.getProps();
+        return_hashmap.put("block", Registries.BLOCK.getId(block).toString());
+        return_hashmap.put("number", String.valueOf(number));
+        if(position != null) {
+            return_hashmap.put("position", position.toString());
+        }
+
+        return return_hashmap;
     }
 
     @Override
@@ -41,8 +55,7 @@ public class BreakTask extends Task{
         if(position != null) {
             list_of_fields.add(position.toString());
         }
-        list_of_fields.add(type);
-
+        list_of_fields.add(super.getProps().get("type"));
 
         return list_of_fields.toString();
     }
@@ -50,7 +63,7 @@ public class BreakTask extends Task{
     public static Task fromString(String string){
         List<String> list_of_fields = listInStringToList(string);
 
-        if(list_of_fields.size() < 5){
+        if(list_of_fields.size() < 6){
             return new BreakTask(list_of_fields.get(0),
                     Registries.BLOCK.get(new Identifier(list_of_fields.get(1))),
                     Integer.parseInt(list_of_fields.get(2)),

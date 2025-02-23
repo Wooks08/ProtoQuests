@@ -92,7 +92,7 @@ public class AddTasks {
 
         final Block block = Registries.BLOCK.get(blockKey);
 
-        BreakTask task = new BreakTask(task_name, block, number, null);
+        BreakTask task = new BreakTask(task_name, block, number, null, 0);
 
         state.quests.get(quest_name).getTasks().add(task);
         state.markDirty();
@@ -131,7 +131,7 @@ public class AddTasks {
 
         final Block block = Registries.BLOCK.get(blockKey);
 
-        BreakTask task = new BreakTask(task_name, block, number, position);
+        BreakTask task = new BreakTask(task_name, block, number, position,0);
 
         state.quests.get(quest_name).getTasks().add(task);
         state.markDirty();

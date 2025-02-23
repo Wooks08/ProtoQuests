@@ -4,6 +4,7 @@ import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.wookscode.protoquests.event.EventsManager;
 import net.wookscode.protoquests.util.ModCommandRegister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,5 +27,6 @@ public class ProtoQuests implements ModInitializer {
 		LOGGER.info("Initializing ProtoQuests...");
 
 		ModCommandRegister.registerCommands();
+		EventsManager.registerEvents();
 	}
 }

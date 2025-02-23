@@ -1,12 +1,12 @@
 package net.wookscode.protoquests.util;
 
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.PersistentState;
 import net.minecraft.world.PersistentStateManager;
 import net.minecraft.world.World;
 import net.wookscode.protoquests.ProtoQuests;
+import net.wookscode.protoquests.quest.Quest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,13 +16,13 @@ public class StateSaverAndLoader extends PersistentState {
 
     @Override
     public NbtCompound writeNbt(NbtCompound nbt) {
-        NbtCompound questsCompound = new NbtCompound();
+        NbtCompound quests_compound = new NbtCompound();
 
         for (Map.Entry<String, Quest> entry : quests.entrySet()) {
-            questsCompound.put(entry.getKey(), entry.getValue().toNbt());
+            quests_compound.put(entry.getKey(), entry.getValue().toNbt());
         }
 
-        nbt.put("quests", questsCompound);
+        nbt.put("quests", quests_compound);
 
         return nbt;
     }
@@ -33,10 +33,10 @@ public class StateSaverAndLoader extends PersistentState {
         state.quests = new HashMap<>();
 
         if (nbt.contains("quests")) {
-            NbtCompound questsCompound = nbt.getCompound("quests");
+            NbtCompound quests_compound = nbt.getCompound("quests");
 
-            for (String key : questsCompound.getKeys()) {
-                Quest quest = Quest.fromNbt(questsCompound.getCompound(key));
+            for (String key : quests_compound.getKeys()) {
+                Quest quest = Quest.fromNbt(quests_compound.getCompound(key));
                 state.quests.put(key, quest);
             }
         }
@@ -45,16 +45,12 @@ public class StateSaverAndLoader extends PersistentState {
     }
 
     public static StateSaverAndLoader getServerState(MinecraftServer server) {
-        PersistentStateManager persistentStateManager = server.getWorld(World.OVERWORLD).getPersistentStateManager();
+        PersistentStateManager persistent_state_manager = server.getWorld(World.OVERWORLD).getPersistentStateManager();
 
-        return persistentStateManager.getOrCreate(
+        return persistent_state_manager.getOrCreate(
                 StateSaverAndLoader::fromNbt,
                 StateSaverAndLoader::new,
                 ProtoQuests.MOD_ID
         );
-    }
-
-    public static HashMap<String, Quest> getQuests(){
-        return quests;
     }
 }

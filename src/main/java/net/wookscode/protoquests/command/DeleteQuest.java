@@ -17,20 +17,21 @@ import net.wookscode.protoquests.util.StateSaverAndLoader;
 
 import java.util.Map;
 
-public class CreateNewQuest {
-    private static final DynamicCommandExceptionType QUEST_ALREADY_EXISTS = new DynamicCommandExceptionType(name -> ProtoQuests.PREFIX.copy()
+public class DeleteQuest {
+    private static final DynamicCommandExceptionType QUEST_DOES_NOT_EXIST = new DynamicCommandExceptionType(name -> ProtoQuests.PREFIX.copy()
             .append(Text.literal("Quest ").setStyle(Style.EMPTY.withColor(ProtoQuests.RED)))
             .append(Text.literal(name.toString()).setStyle(Style.EMPTY.withColor(ProtoQuests.PRIMARY)))
-            .append(Text.literal(" already exists").setStyle(Style.EMPTY.withColor(ProtoQuests.RED)))
+            .append(Text.literal(" wasn't created. If you want to create it use ").setStyle(Style.EMPTY.withColor(ProtoQuests.RED)))
+            .append(Text.literal("/pq quest create <name>.").setStyle(Style.EMPTY.withColor(ProtoQuests.PRIMARY)))
     );
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher,
                            CommandRegistryAccess commandRegistryAccess,
                            CommandManager.RegistrationEnvironment registrationEnvironment){
 
-        dispatcher.register(CommandManager.literal("pq").then(CommandManager.literal("quest").then(CommandManager.literal("create")
+        dispatcher.register(CommandManager.literal("pq").then(CommandManager.literal("quest").then(CommandManager.literal("delete")
                 .then(CommandManager.argument("name", StringArgumentType.string())
-                        .executes(CreateNewQuest::run)))));
+                        .executes(DeleteQuest::run)))));
     }
 
     private static int run(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
@@ -40,21 +41,14 @@ public class CreateNewQuest {
         StateSaverAndLoader state = StateSaverAndLoader.getServerState(server);
 
         final String name = StringArgumentType.getString(context, "name");
-        if (state.quests.containsKey(name)){
-            throw QUEST_ALREADY_EXISTS.create(name);
+        if (!state.quests.containsKey(name)){
+            throw QUEST_DOES_NOT_EXIST.create(name);
         }
 
-        Quest newQuest = new Quest(name);
-
-        state.quests.put(name, newQuest);
+        state.quests.remove(name);
         state.markDirty();
 
-        source.sendMessage(Text.literal(state.quests.toString()));
-        for (Map.Entry<String, Quest> entry : state.quests.entrySet()){
-            source.sendMessage(Text.literal(entry.getValue().getProps().toString()));
-        }
-
-        source.sendMessage(ProtoQuests.PREFIX.copy().append(Text.literal("Quest added successfully!")));
+        source.sendMessage(ProtoQuests.PREFIX.copy().append(Text.literal("Quest deleted successfully!")));
 
         return 1;
     }

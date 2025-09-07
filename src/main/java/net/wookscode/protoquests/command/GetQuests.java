@@ -43,8 +43,12 @@ public class GetQuests {
             msg = msg.copy().append(Text.literal("  - Tasks:\n").setStyle(Style.EMPTY.withColor(ProtoQuests.PRIMARY)));
             if(!tasks.isEmpty()) {
                 for (Task task : tasks) {
+                    int progress = (int) (Math.floor((double) task.getProps().get("progress") / 10));
                     msg = msg.copy().append(Text.literal("    > ").setStyle(Style.EMPTY.withColor(ProtoQuests.PRIMARY)))
                             .append(Text.literal(task.getName())).setStyle(Style.EMPTY.withColor(ProtoQuests.WHITE))
+                            .append(Text.literal("\n        Progress: ").setStyle(Style.EMPTY.withColor(ProtoQuests.PRIMARY)))
+                            .append(Text.literal("█".repeat(progress)).setStyle(Style.EMPTY.withColor(ProtoQuests.WHITE)))
+                            .append(Text.literal(" " + task.getProps().get("progress").toString() + "%").setStyle(Style.EMPTY.withColor(ProtoQuests.PRIMARY)))
                             .append(Text.literal("\n"));
                 }
             }

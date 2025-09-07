@@ -8,6 +8,7 @@ import net.minecraft.util.math.Vec3d;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class BreakTask extends Task{
     private Block block;
@@ -35,8 +36,8 @@ public class BreakTask extends Task{
     }
 
     @Override
-    public HashMap<String, String> getProps(){
-        HashMap<String, String> return_hashmap = super.getProps();
+    public HashMap<String, Object> getProps(){
+        HashMap<String, Object> return_hashmap = super.getProps();
         return_hashmap.put("block", Registries.BLOCK.getId(block).toString());
         return_hashmap.put("number", String.valueOf(number));
         if(position != null) {
@@ -55,7 +56,7 @@ public class BreakTask extends Task{
         if(position != null) {
             list_of_fields.add(position.toString());
         }
-        list_of_fields.add(super.getProps().get("type"));
+        list_of_fields.add((String) super.getProps().get("type"));
 
         return list_of_fields.toString();
     }

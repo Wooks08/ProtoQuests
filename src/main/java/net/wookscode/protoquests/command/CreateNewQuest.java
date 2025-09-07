@@ -4,25 +4,19 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.wookscode.protoquests.ProtoQuests;
+import net.wookscode.protoquests.exception.QuestAlreadyExistsException;
 import net.wookscode.protoquests.quest.Quest;
 import net.wookscode.protoquests.util.StateSaverAndLoader;
 
 import java.util.Map;
 
 public class CreateNewQuest {
-    private static final DynamicCommandExceptionType QUEST_ALREADY_EXISTS = new DynamicCommandExceptionType(name -> ProtoQuests.PREFIX.copy()
-            .append(Text.literal("Quest ").setStyle(Style.EMPTY.withColor(ProtoQuests.RED)))
-            .append(Text.literal(name.toString()).setStyle(Style.EMPTY.withColor(ProtoQuests.PRIMARY)))
-            .append(Text.literal(" already exists").setStyle(Style.EMPTY.withColor(ProtoQuests.RED)))
-    );
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher,
                            CommandRegistryAccess commandRegistryAccess,
@@ -41,7 +35,7 @@ public class CreateNewQuest {
 
         final String name = StringArgumentType.getString(context, "name");
         if (state.quests.containsKey(name)){
-            throw QUEST_ALREADY_EXISTS.create(name);
+            throw QuestAlreadyExistsException.create(name);
         }
 
         Quest newQuest = new Quest(name);

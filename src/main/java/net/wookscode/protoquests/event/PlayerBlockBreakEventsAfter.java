@@ -32,12 +32,12 @@ public class PlayerBlockBreakEventsAfter implements PlayerBlockBreakEvents.After
         for(Map.Entry<String, Quest> quest : server_state.quests.entrySet()){
             for(Task task : quest.getValue().getTasks()){
                 if(Objects.equals(task.getProps().get("type"), "break")){
-                    Block block_task = Registries.BLOCK.get(new Identifier(task.getProps().get("block")));
+                    Block block_task = Registries.BLOCK.get(new Identifier((String) task.getProps().get("block")));
                     Block block_broken = state.getBlock();
 
-                    if(Objects.equals(Registries.BLOCK.get(new Identifier(task.getProps().get("block"))), state.getBlock())){
-                        double current_progress = task.getProgress();
-                        double progress_per_block = (double) 100 / Integer.parseInt(task.getProps().get("number"));
+                    if(Objects.equals(Registries.BLOCK.get(new Identifier((String) task.getProps().get("block"))), state.getBlock())){
+                        double current_progress = (double) task.getProps().get("progress");
+                        double progress_per_block = (double) 100 / Integer.parseInt((String) task.getProps().get("number"));
                         task.setProgress(current_progress + progress_per_block);
                     }
                 }

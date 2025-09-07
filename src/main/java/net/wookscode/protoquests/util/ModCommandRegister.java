@@ -8,10 +8,11 @@ public class ModCommandRegister {
     public static void registerCommands(){
         ProtoQuests.LOGGER.info("Registering commands...");
 
-        CommandRegistrationCallback.EVENT.register(AssignQuest::register);
         CommandRegistrationCallback.EVENT.register(CreateNewQuest::register);
         CommandRegistrationCallback.EVENT.register(DeleteQuest::register);
-        CommandRegistrationCallback.EVENT.register(AddTasks::register);
+        CommandRegistrationCallback.EVENT.register(AddTask::register);
         CommandRegistrationCallback.EVENT.register(GetQuests::register);
+        CommandRegistrationCallback.EVENT.register(AssignQuestToPlayer::register);
+        CommandRegistrationCallback.EVENT.register(GetQuestsFromPlayer::register);
     }
 }

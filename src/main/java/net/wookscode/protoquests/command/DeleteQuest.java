@@ -4,27 +4,28 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.wookscode.protoquests.ProtoQuests;
-import net.wookscode.protoquests.exception.QuestAlreadyExistsException;
+import net.wookscode.protoquests.exception.QuestDoesNotExistException;
 import net.wookscode.protoquests.quest.Quest;
 import net.wookscode.protoquests.util.StateSaverAndLoader;
 
 import java.util.Map;
 
-public class CreateNewQuest {
-
+public class DeleteQuest {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher,
                            CommandRegistryAccess commandRegistryAccess,
                            CommandManager.RegistrationEnvironment registrationEnvironment){
 
-        dispatcher.register(CommandManager.literal("pq").then(CommandManager.literal("quest").then(CommandManager.literal("create")
+        dispatcher.register(CommandManager.literal("pq").then(CommandManager.literal("quest").then(CommandManager.literal("delete")
                 .then(CommandManager.argument("name", StringArgumentType.string())
-                        .executes(CreateNewQuest::run)))));
+                        .executes(DeleteQuest::run)))));
     }
 
     private static int run(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
@@ -34,21 +35,14 @@ public class CreateNewQuest {
         StateSaverAndLoader state = StateSaverAndLoader.getServerState(server);
 
         final String name = StringArgumentType.getString(context, "name");
-        if (state.quests.containsKey(name)){
-            throw QuestAlreadyExistsException.create(name);
+        if (!state.quests.containsKey(name)){
+            throw QuestDoesNotExistException.create(name);
         }
 
-        Quest newQuest = new Quest(name);
-
-        state.quests.put(name, newQuest);
+        state.quests.remove(name);
         state.markDirty();
 
-        source.sendMessage(Text.literal(state.quests.toString()));
-        for (Map.Entry<String, Quest> entry : state.quests.entrySet()){
-            source.sendMessage(Text.literal(entry.getValue().getProps().toString()));
-        }
-
-        source.sendMessage(ProtoQuests.PREFIX.copy().append(Text.literal("Quest added successfully!")));
+        source.sendMessage(ProtoQuests.PREFIX.copy().append(Text.literal("Quest deleted successfully!")));
 
         return 1;
     }

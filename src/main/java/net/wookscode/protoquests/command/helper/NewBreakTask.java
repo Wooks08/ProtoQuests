@@ -9,12 +9,17 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.wookscode.protoquests.ProtoQuests;
 import net.wookscode.protoquests.exception.BlockNotFoundException;
 import net.wookscode.protoquests.exception.QuestDoesNotExistException;
 import net.wookscode.protoquests.exception.TaskAlreadyExistException;
+import net.wookscode.protoquests.task.BreakTask;
 import net.wookscode.protoquests.task.Task;
 import net.wookscode.protoquests.util.StateSaverAndLoader;
+
+import java.util.Objects;
 
 public class NewBreakTask {
     public NewBreakTask(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
@@ -33,7 +38,7 @@ public class NewBreakTask {
         }
 
         for(Task task : state.quests.get(quest_name).getTasks()){
-            if(task.getName().contains(task_name)) {
+            if(Objects.equals(task.getName(), task_name)) {
                 throw TaskAlreadyExistException.create(task_name);
             }
         }
@@ -44,12 +49,16 @@ public class NewBreakTask {
 
         final Block block = Registries.BLOCK.get(blockKey);
 
-        net.wookscode.protoquests.task.BreakTask task = new net.wookscode.protoquests.task.BreakTask(task_name, block, number, null);
+        BreakTask task = new BreakTask(task_name, block, number, null);
 
         state.quests.get(quest_name).getTasks().add(task);
         state.markDirty();
 
-        assert block != null;
-        context.getSource().sendMessage(Text.literal(quest_name + ": " + block.toString()));
+        source.sendMessage(ProtoQuests.PREFIX.copy()
+                .append(Text.literal("Task ").setStyle(Style.EMPTY.withColor(ProtoQuests.WHITE)))
+                .append(Text.literal(task_name).setStyle(Style.EMPTY.withColor(ProtoQuests.PRIMARY)))
+                .append(Text.literal(" has been added to quest ").setStyle(Style.EMPTY.withColor(ProtoQuests.WHITE)))
+                .append(Text.literal(quest_name).setStyle(Style.EMPTY.withColor(ProtoQuests.PRIMARY)))
+                .append(Text.literal(".").setStyle(Style.EMPTY.withColor(ProtoQuests.WHITE))));
     }
 }

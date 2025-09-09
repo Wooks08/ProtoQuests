@@ -1,9 +1,8 @@
 package net.wookscode.protoquests.quest;
 
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.Block;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.Registries;
+import net.wookscode.protoquests.result.GiveResult;
+import net.wookscode.protoquests.result.Result;
 import net.wookscode.protoquests.task.BreakTask;
 import net.wookscode.protoquests.task.Task;
 
@@ -14,7 +13,7 @@ import java.util.List;
 public class Quest {
     private String name;
     private List<Task> tasks;
-    private List<String> results;
+    private List<Result> results;
 
     public Quest(String name){
         this.name = name;
@@ -39,7 +38,7 @@ public class Quest {
         return tasks;
     }
 
-    public List<String> getResults(){
+    public List<Result> getResults(){
         return results;
     }
 
@@ -54,7 +53,11 @@ public class Quest {
         }
         nbt.putString("tasks",tasks_as_list_of_strings.toString());
 
-        nbt.putString("results", results.toString());
+        List<String> results_as_list_of_strings = new ArrayList<>();
+        for(Result result: results){
+            results_as_list_of_strings.add(result.asString());
+        }
+        nbt.putString("results", results_as_list_of_strings.toString());
 
         return nbt;
     }
@@ -62,27 +65,47 @@ public class Quest {
     public static Quest fromNbt(NbtCompound nbt) {
         Quest quest = new Quest(nbt.getString("name"));
 
-        for(String task: tasksInStringToList(nbt.getString("tasks"))) {
-            List<String> type_list = listInStringToList(task);
-            String type = type_list.get(type_list.size() - 1).strip();
+        for(String task: elementsInStringToList(nbt.getString("tasks"))) {
+            List<String> list_with_task = listInStringToList(task);
+            String type = list_with_task.get(list_with_task.size() - 1).strip();
             switch (type) {
                 case "break":
                     quest.tasks.add(BreakTask.fromString(task));
             }
         }
-        quest.results = listInStringToList(nbt.getString("results"));
+
+        for(String result: elementsInStringToList(nbt.getString("results"))){
+            List<String> list_with_result = listInStringToList(result);
+            String type = list_with_result.get(list_with_result.size() - 1).strip();
+
+//            TODO: Finish recovering data from nbt
+//            switch (type){
+//                case "give":
+//                    quest.results.add(GiveResult.fromString(result));
+//                case "xp":
+//                    ;
+//                case "command":
+//                    ;
+//            }
+        }
 
         return quest;
     }
 
-    private static List<String> tasksInStringToList(String string){
-        StringBuilder sb1 = new StringBuilder(string);
+    private static List<String> elementsInStringToList(String string_of_elements){
+        /*
+        * Structure of the input string should look as follows:
+        *
+        * "[[element1, element2], [element3, element4], ...]"
+         */
 
-        sb1.deleteCharAt(string.length() - 1);
+        StringBuilder sb1 = new StringBuilder(string_of_elements);
 
-        string = sb1.toString();
+        sb1.deleteCharAt(string_of_elements.length() - 1);
 
-        List<String> list_of_tasks = new ArrayList<>(List.of(string.split("]")));
+        string_of_elements = sb1.toString();
+
+        List<String> list_of_tasks = new ArrayList<>(List.of(string_of_elements.split("]")));
 
         for (String task : list_of_tasks){
             StringBuilder sb2 = new StringBuilder(task);

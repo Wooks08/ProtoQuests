@@ -11,6 +11,7 @@ import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.wookscode.protoquests.ProtoQuests;
 import net.wookscode.protoquests.quest.Quest;
+import net.wookscode.protoquests.result.Result;
 import net.wookscode.protoquests.task.Task;
 import net.wookscode.protoquests.util.StateSaverAndLoader;
 
@@ -33,6 +34,12 @@ public class GetQuests {
 
         StateSaverAndLoader state = StateSaverAndLoader.getServerState(server);
 
+        if(state.quests.isEmpty()) {
+            Text msg = ProtoQuests.PREFIX.copy().append(Text.literal("Nothing to show").setStyle(Style.EMPTY.withColor(ProtoQuests.RED)));
+            context.getSource().sendMessage(msg);
+
+            return 1;
+        }
         Text msg = ProtoQuests.PREFIX.copy().append(Text.literal("Quests:"));
         for(Map.Entry<String, Quest> entry : state.quests.entrySet()){
             msg = msg.copy().append(Text.literal("\n- " + entry.getKey() + ":\n"));
@@ -56,13 +63,13 @@ public class GetQuests {
                 msg = msg.copy().append(Text.literal("      No Tasks\n"));
             }
 
-            List<String> results = entry.getValue().getResults();
+            List<Result> results = entry.getValue().getResults();
 
             msg = msg.copy().append(Text.literal("  - Results:\n").setStyle(Style.EMPTY.withColor(ProtoQuests.PRIMARY)));
-            if(!results.stream().allMatch(String::isEmpty)){
-                for (String result : results) {
+            if(!results.isEmpty()){
+                for (Result result : results) {
                     msg = msg.copy().append(Text.literal("    > ").setStyle(Style.EMPTY.withColor(ProtoQuests.PRIMARY)))
-                            .append(Text.literal(result).setStyle(Style.EMPTY.withColor(ProtoQuests.WHITE)))
+                            .append(Text.literal(result.getName()).setStyle(Style.EMPTY.withColor(ProtoQuests.WHITE)))
                             .append(Text.literal("\n"));
                 }
             }

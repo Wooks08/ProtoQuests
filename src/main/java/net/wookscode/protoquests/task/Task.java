@@ -6,6 +6,7 @@ public class Task {
     private String name;
     private String type;
     private double progress;
+    private boolean finished;
 
     public Task(String name, String type, double progress){
         this.name = name;
@@ -26,12 +27,18 @@ public class Task {
         return_hashmap.put("name", this.name);
         return_hashmap.put("type", this.type);
         return_hashmap.put("progress", this.progress);
+        return_hashmap.put("finished", this.finished);
 
         return return_hashmap;
     }
 
     public void setProgress(double new_progress){
-        this.progress = new_progress;
+        if(this.progress < 100) {
+            this.progress = new_progress;
+        }
+        if(this.progress >= 100){
+            this.finished = true;
+        }
     }
 
     public String asString(){

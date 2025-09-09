@@ -8,9 +8,8 @@ import net.minecraft.util.math.Vec3d;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
-public class BreakTask extends Task{
+public class BreakTask extends Task {
     private Block block;
     private int number;
     private Vec3d position;
@@ -20,14 +19,6 @@ public class BreakTask extends Task{
         this.block = block;
         this.number = number;
         this.position = position;
-    }
-
-    public String getName(){
-        return super.getName();
-    }
-
-    public Block getBlock() {
-        return block;
     }
 
     @Override
@@ -93,10 +84,6 @@ public class BreakTask extends Task{
         }
 
         return return_list;
-    }
-
-    private static List<String> fieldsInStringToList(String string){
-       return new ArrayList<>();
     }
 
     private static Vec3d vectorInStringToVector(String string){

@@ -37,8 +37,10 @@ public class PlayerBlockBreakEventsAfter implements PlayerBlockBreakEvents.After
 
                     if(Objects.equals(Registries.BLOCK.get(new Identifier((String) task.getProps().get("block"))), state.getBlock())){
                         double current_progress = (double) task.getProps().get("progress");
-                        double progress_per_block = (double) 100 / Integer.parseInt((String) task.getProps().get("number"));
-                        task.setProgress(current_progress + progress_per_block);
+                        if(current_progress < 100) {
+                            double progress_per_block = (double) 100 / Integer.parseInt((String) task.getProps().get("number"));
+                            task.setProgress(current_progress + progress_per_block);
+                        }
                     }
                 }
             }

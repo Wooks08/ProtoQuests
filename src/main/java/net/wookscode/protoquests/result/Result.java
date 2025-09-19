@@ -25,7 +25,7 @@ public class Result {
         return return_hashmap;
     }
 
-    public void setToReceived(){
+    public void received(){
         if(!this.received){
             this.received = false;
         }

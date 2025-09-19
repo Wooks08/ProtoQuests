@@ -1,28 +1,23 @@
 package net.wookscode.protoquests.result;
 
-import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class GiveResult extends Result{
-    private Item item;
+public class XpResult extends Result{
     private int amount;
 
-    public GiveResult(String name, Item item, int amount){
-        super(name, "give");
-        this.item = item;
+    public XpResult(String name, int amount){
+        super(name, "xp");
         this.amount = amount;
     }
 
     @Override
     public HashMap<String, Object> getProps(){
         HashMap<String, Object> return_hashmap = super.getProps();
-        return_hashmap.put("item", item);
         return_hashmap.put("amount", amount);
 
         return return_hashmap;
@@ -32,20 +27,13 @@ public class GiveResult extends Result{
     public String asString(){
         List<String> list_of_fields = new ArrayList<>();
         list_of_fields.add(super.getName());
-        list_of_fields.add(Registries.ITEM.getId(item).toString());
         list_of_fields.add(Integer.toString(amount));
         list_of_fields.add((String) super.getProps().get("type"));
 
         return list_of_fields.toString();
     }
 
-
-    public static GiveResult fromString(List<String> fields){
-        String name = fields.get(0);
-        String item = fields.get(1);
-        String amount = fields.get(2);
-        GiveResult result = new GiveResult(name, Registries.ITEM.get(new Identifier(item)), Integer.parseInt(amount));
-
-        return result;
+    public static XpResult fromString(List<String> fields){
+        return new XpResult(fields.get(0), Integer.parseInt(fields.get(1)));
     }
 }

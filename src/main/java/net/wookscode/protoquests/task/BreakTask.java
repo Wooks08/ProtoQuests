@@ -52,20 +52,19 @@ public class BreakTask extends Task {
         return list_of_fields.toString();
     }
 
-    public static Task fromString(String string){
-        List<String> list_of_fields = listInStringToList(string);
+    public static Task fromString(List<String> fields){
 
-        if(list_of_fields.size() < 6){
-            return new BreakTask(list_of_fields.get(0),
-                    Registries.BLOCK.get(new Identifier(list_of_fields.get(1))),
-                    Integer.parseInt(list_of_fields.get(2)),
+        if(fields.size() < 6){
+            return new BreakTask(fields.get(0),
+                    Registries.BLOCK.get(new Identifier(fields.get(1))),
+                    Integer.parseInt(fields.get(2)),
                     null);
         }
         else {
-            return new BreakTask(list_of_fields.get(0),
-                    Registries.BLOCK.get(new Identifier(list_of_fields.get(1))),
-                    Integer.parseInt(list_of_fields.get(2)),
-                    vectorInStringToVector(list_of_fields.get(3)));
+            return new BreakTask(fields.get(0),
+                    Registries.BLOCK.get(new Identifier(fields.get(1))),
+                    Integer.parseInt(fields.get(2)),
+                    vectorInStringToVector(fields.get(3)));
         }
     }
 

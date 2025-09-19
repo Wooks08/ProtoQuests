@@ -13,7 +13,9 @@ import net.minecraft.item.Item;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
+import net.wookscode.protoquests.command.helper.NewCommandResult;
 import net.wookscode.protoquests.command.helper.NewGiveResult;
+import net.wookscode.protoquests.command.helper.NewXpResult;
 import net.wookscode.protoquests.exception.QuestDoesNotExistException;
 import net.wookscode.protoquests.util.StateSaverAndLoader;
 
@@ -44,35 +46,13 @@ public class AddResult {
     }
 
     private static int run_xp(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerCommandSource source = context.getSource();
-        MinecraftServer server = source.getServer();
-
-        StateSaverAndLoader state = StateSaverAndLoader.getServerState(server);
-
-        final String name = StringArgumentType.getString(context, "quest_name");
-        if (!state.quests.containsKey(name)){
-            throw QuestDoesNotExistException.create(name);
-        }
-
-
-
+        new NewXpResult(context);
 
         return 1;
     }
 
     private static int run_command(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
-        ServerCommandSource source = context.getSource();
-        MinecraftServer server = source.getServer();
-
-        StateSaverAndLoader state = StateSaverAndLoader.getServerState(server);
-
-        final String name = StringArgumentType.getString(context, "quest_name");
-        if (!state.quests.containsKey(name)){
-            throw QuestDoesNotExistException.create(name);
-        }
-
-
-
+        new NewCommandResult(context);
 
         return 1;
     }

@@ -4,9 +4,9 @@ import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.wookscode.protoquests.command.helper.ChatInputManager;
 import net.wookscode.protoquests.event.EventsManager;
 import net.wookscode.protoquests.util.ModCommandRegister;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,5 +29,6 @@ public class ProtoQuests implements ModInitializer {
 
 		ModCommandRegister.registerCommands();
 		EventsManager.registerEvents();
+		ChatInputManager.init();
 	}
 }

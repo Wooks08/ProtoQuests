@@ -14,5 +14,8 @@ public class ModCommandRegister {
         CommandRegistrationCallback.EVENT.register(GetQuests::register);
         CommandRegistrationCallback.EVENT.register(AssignQuestToPlayer::register);
         CommandRegistrationCallback.EVENT.register(GetQuestsFromPlayer::register);
+        CommandRegistrationCallback.EVENT.register(AddResult::register);
+        CommandRegistrationCallback.EVENT.register(RemoveResult::register);
+        CommandRegistrationCallback.EVENT.register(RemoveTask::register);
     }
 }

@@ -26,7 +26,7 @@ public class AddTask {
                                                 .then(CommandManager.literal("break")
                                                         .then(CommandManager.argument("block", RegistryKeyArgumentType.registryKey(RegistryKeys.BLOCK))
                                                                 .then(CommandManager.argument("number", IntegerArgumentType.integer())
-                                                                        .then(CommandManager.argument("position", Vec3ArgumentType.vec3())
+                                                                        .then(CommandManager.argument("position", BlockPosArgumentType.blockPos())
                                                                                 .executes(AddTask::run_break_with_position))
                                                                         .executes(AddTask::run_break)))))))));
     }

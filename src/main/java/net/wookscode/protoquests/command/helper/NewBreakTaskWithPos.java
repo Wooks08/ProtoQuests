@@ -5,12 +5,14 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.block.Block;
+import net.minecraft.command.argument.BlockPosArgumentType;
 import net.minecraft.command.argument.Vec3ArgumentType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.wookscode.protoquests.exception.BlockNotFoundException;
 import net.wookscode.protoquests.exception.QuestDoesNotExistException;
@@ -30,7 +32,7 @@ public class NewBreakTaskWithPos {
         final String task_name = StringArgumentType.getString(context, "task_name");
         final RegistryKey<Block> blockKey = context.getArgument("block", RegistryKey.class);
         final int number = IntegerArgumentType.getInteger(context, "number");
-        final Vec3d position = Vec3ArgumentType.getVec3(context, "position");
+        final BlockPos position = BlockPosArgumentType.getBlockPos(context, "position");
 
         if(!state.quests.containsKey(quest_name)){
             throw QuestDoesNotExistException.create(quest_name);

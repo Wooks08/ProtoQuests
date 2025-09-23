@@ -10,7 +10,7 @@ public class TaskAlreadyExistException {
     private static final DynamicCommandExceptionType TASK_ALREADY_EXISTS = new DynamicCommandExceptionType(name -> ProtoQuests.PREFIX.copy()
             .append(Text.literal("Task of name ").setStyle(Style.EMPTY.withColor(ProtoQuests.RED)))
             .append(Text.literal(name.toString()).setStyle(Style.EMPTY.withColor(ProtoQuests.PRIMARY)))
-            .append(Text.literal(" already exist! Choose other name.").setStyle(Style.EMPTY.withColor(ProtoQuests.RED)))
+            .append(Text.literal(" already exists in this quest! Choose other name.").setStyle(Style.EMPTY.withColor(ProtoQuests.RED)))
     );
 
     public static CommandSyntaxException create(String name){

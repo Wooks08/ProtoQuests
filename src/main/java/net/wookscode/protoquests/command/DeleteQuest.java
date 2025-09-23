@@ -18,6 +18,7 @@ import net.wookscode.protoquests.util.StateSaverAndLoader;
 
 import java.util.Map;
 
+
 public class DeleteQuest {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher,
                            CommandRegistryAccess commandRegistryAccess,
@@ -38,6 +39,9 @@ public class DeleteQuest {
         if (!state.quests.containsKey(name)){
             throw QuestDoesNotExistException.create(name);
         }
+
+        state.quests.get(name).getResults().clear();
+        state.quests.get(name).getTasks().clear();
 
         state.quests.remove(name);
         state.markDirty();

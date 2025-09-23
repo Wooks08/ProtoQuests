@@ -86,7 +86,6 @@ public class Quest {
                 List<String> list_with_result = listInStringToList(result);
                 String type = list_with_result.get(list_with_result.size() - 1).strip();
 
-//            TODO: Fix names of every result besides first one having ']' at the beginning
                 switch (type) {
                     case "give":
                         quest.results.add(GiveResult.fromString(list_with_result));
@@ -132,9 +131,9 @@ public class Quest {
 
     private static List<String> listInStringToList(String string) {
 
-        StringBuilder sb = new StringBuilder(string);
+        StringBuilder sb = new StringBuilder(string.strip());
 
-        sb.deleteCharAt(string.length() - 1);
+        sb.deleteCharAt(sb.length() - 1);
         sb.deleteCharAt(0);
 
         string = sb.toString();

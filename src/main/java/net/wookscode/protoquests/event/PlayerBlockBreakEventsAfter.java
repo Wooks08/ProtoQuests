@@ -32,14 +32,42 @@ public class PlayerBlockBreakEventsAfter implements PlayerBlockBreakEvents.After
         for(Map.Entry<String, Quest> quest : server_state.quests.entrySet()){
             for(Task task : quest.getValue().getTasks()){
                 if(Objects.equals(task.getProps().get("type"), "break")){
-                    Block block_task = Registries.BLOCK.get(new Identifier((String) task.getProps().get("block")));
-                    Block block_broken = state.getBlock();
+                    Identifier brokenBlockId = Registries.BLOCK.getId(state.getBlock());
+                    String taskBlockId = (String) task.getProps().get("block");
+                    BlockPos target_pos = (BlockPos) task.getProps().get("position");
 
-                    if(Objects.equals(Registries.BLOCK.get(new Identifier((String) task.getProps().get("block"))), state.getBlock())){
-                        double current_progress = (double) task.getProps().get("progress");
-                        if(current_progress < 100) {
-                            double progress_per_block = (double) 100 / Integer.parseInt((String) task.getProps().get("number"));
-                            task.setProgress(current_progress + progress_per_block);
+                    if (Objects.equals(taskBlockId, brokenBlockId.toString())) {
+                        if(task.getProps().size() > 8) {
+                            int completed_actions = (int) task.getProps().getOrDefault("actions_completed", 0);
+                            int target = Integer.parseInt((String) task.getProps().get("actions_to_complete"));
+
+                            completed_actions++;
+                            task.getProps().put("actions_completed", completed_actions);
+
+                            double progress = ((double) completed_actions / target) * 100;
+                            task.setProgress(progress);
+
+                            if (completed_actions >= target) {
+                                task.setProgress(100);
+                            }
+                        }
+                        else if(task.getProps().size() == 8) {
+                            //TODO: Fix not properly working position check
+
+                            if(target_pos.getX() == pos.getX() && target_pos.getY() == pos.getY() && target_pos.getZ() == pos.getZ()){
+                                int completed_actions = (int) task.getProps().getOrDefault("actions_completed", 0);
+                                int target = Integer.parseInt((String) task.getProps().get("actions_to_complete"));
+
+                                completed_actions++;
+                                task.getProps().put("actions_completed", completed_actions);
+
+                                double progress = ((double) completed_actions / target) * 100;
+                                task.setProgress(progress);
+
+                                if (completed_actions >= target) {
+                                    task.setProgress(100);
+                                }
+                            }
                         }
                     }
                 }

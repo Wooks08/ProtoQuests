@@ -12,13 +12,11 @@ import java.util.List;
 
 public class BreakTask extends Task {
     private Block block;
-    private int number;
     private BlockPos position;
 
     public BreakTask(String name, Block block, int number, BlockPos position){
-        super(name, "break");
+        super(name, "break", number, 0);
         this.block = block;
-        this.number = number;
         this.position = position;
     }
 
@@ -31,9 +29,8 @@ public class BreakTask extends Task {
     public HashMap<String, Object> getProps(){
         HashMap<String, Object> return_hashmap = super.getProps();
         return_hashmap.put("block", Registries.BLOCK.getId(block).toString());
-        return_hashmap.put("number", String.valueOf(number));
         if(position != null) {
-            return_hashmap.put("position", position.toString());
+            return_hashmap.put("position", position);
         }
 
         return return_hashmap;
@@ -44,7 +41,7 @@ public class BreakTask extends Task {
         List<String> list_of_fields = new ArrayList<>();
         list_of_fields.add(super.getName());
         list_of_fields.add(Registries.BLOCK.getId(block).toString());
-        list_of_fields.add(Integer.toString(number));
+        list_of_fields.add(Integer.toString((Integer) super.getProps().get("actions_to_complete")));
         if(position != null) {
             list_of_fields.add(position.toString());
         }

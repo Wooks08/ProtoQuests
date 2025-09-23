@@ -141,7 +141,12 @@ public class Quest {
 
         List<String> return_list = new ArrayList<>();
         for(String element : List.of(string.split(",(?![^(]*\\))"))){
-            return_list.add(element.strip());
+            String cleaned = element.strip()
+                    .replace("BlockPos{x=", "")
+                    .replace("y=", "")
+                    .replace("z=", "")
+                    .replace("}", "");
+            return_list.add(cleaned);
         }
 
         return return_list;

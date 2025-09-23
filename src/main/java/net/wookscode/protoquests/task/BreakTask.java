@@ -3,6 +3,7 @@ package net.wookscode.protoquests.task;
 import net.minecraft.block.Block;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
@@ -12,9 +13,9 @@ import java.util.List;
 public class BreakTask extends Task {
     private Block block;
     private int number;
-    private Vec3d position;
+    private BlockPos position;
 
-    public BreakTask(String name, Block block, int number, Vec3d position){
+    public BreakTask(String name, Block block, int number, BlockPos position){
         super(name, "break");
         this.block = block;
         this.number = number;
@@ -64,7 +65,7 @@ public class BreakTask extends Task {
             return new BreakTask(fields.get(0),
                     Registries.BLOCK.get(new Identifier(fields.get(1))),
                     Integer.parseInt(fields.get(2)),
-                    vectorInStringToVector(fields.get(3)));
+                    blockPosInStringToBlockPos(List.of(fields.get(3), fields.get(4), fields.get(5))));
         }
     }
 
@@ -85,11 +86,11 @@ public class BreakTask extends Task {
         return return_list;
     }
 
-    private static Vec3d vectorInStringToVector(String string){
-        double x = Double.parseDouble(listInStringToList(string).get(0));
-        double y = Double.parseDouble(listInStringToList(string).get(1));
-        double z = Double.parseDouble(listInStringToList(string).get(2));
+    private static BlockPos blockPosInStringToBlockPos(List<String> position){
+        int x = Integer.parseInt(position.get(0));
+        int y = Integer.parseInt(position.get(1));
+        int z = Integer.parseInt(position.get(2));
 
-        return new Vec3d(x, y, z);
+        return new BlockPos(x, y, z);
     }
 }
